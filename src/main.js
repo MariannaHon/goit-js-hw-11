@@ -11,19 +11,42 @@ import { render } from "./js/render-functions";
 export const elem = {
   gallery: document.querySelector('.gallery'),
   form: document.querySelector('.form'),
-  word: document.querySelector('.input'),
+  wordInput: document.querySelector('.input'),
+  loader: document.querySelector('.loader'),
 };
+
+export const lightbox = new SimpleLightbox('.gallery-link', {
+  captionsData: "alt",
+  captionDelay: 250,
+  overlay: true,
+  overlayOpacity: 0.7,
+});
+
+export let word = '';
+
+hideLoading();
+
+elem.wordInput.addEventListener('input', e => {
+  elem.gallery.innerHTML = '';
+  word = elem.wordInput.value.trim();
+  console.log(word);
+});
 
 
 elem.form.addEventListener("submit", e => {
   e.preventDefault();
-
-  const input = e.target.elements.imgInput.value;
-
-  fetchingFrom(input).then(data => {
-    const markup = render(data);
-    elem.gallery.insertAdjacentHTML('beforeend', markup);
-  });
+  if (elem.wordInput !== '') {
+    fetchingFrom(word)
+      .then(data => {
+        render(data);
+        hideLoading();
+      })
+      .catch(error => console.log(error));
+  }
+  else {
+    displayToast("Please complete the field!")
+  }
+  elem.form.reset();
 });
 
 export function displayToast(message) {
@@ -32,4 +55,12 @@ export function displayToast(message) {
     message: message,
     position: 'topRight',
   });
+}
+
+export function showLoading() {
+  elem.loader.style.display = 'block';
+}
+
+function hideLoading() {
+  elem.loader.style.display = 'none';
 }

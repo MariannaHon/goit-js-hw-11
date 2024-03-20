@@ -4,19 +4,31 @@ import "izitoast/dist/css/iziToast.min.css";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-import { elem } from "../main";
+import { elem, lightbox, displayToast } from "../main";
 
-export function render() {
+export function render(data) {
   elem.gallery.innerHTML = '';
-  return `<li class="gallery-item">
-                <a class="gallery-link" href="${largeImageURL}">
-                  <img class="gallery-image" src="${webformatURL}" alt="${tags}" />
+  const images = data.hits;
+
+  if (data.length === 0) {
+    displayToast("Sorry, there are no images matching your search query. Please try again!");
+  }
+  else {
+    const markup = images.map(image => `<li class="gallery-item">
+                <a class="gallery-link" href="${image.largeImageURL}">
+                  <img class="gallery-image" src="${image.webformatURL}" alt="${image.tags}" />
                 </a>
                 <div class="stats">
-                  <p>Likes<br/>${likes}</p>
-                  <p>Views<br/>${views}</p>
-                  <p>Commens<br/>${comments}</p>
-                  <p>Downloads<br/>${downloads}</p>
+                  <p class="text">Likes<br/>${image.likes}</p>
+                  <p class="text">Views<br/>${image.views}</p>
+                  <p class="text">Comments<br/>${image.comments}</p>
+                  <p class="text">Downloads<br/>${image.downloads}</p>
                 </div>
-              </li>`;
+              </li>`)
+      .join('');
+    elem.gallery.insertAdjacentHTML('beforeend', markup);
+
+    lightbox.refresh();
+  }
 }
+
