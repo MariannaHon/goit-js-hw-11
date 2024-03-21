@@ -26,15 +26,11 @@ export let word = '';
 
 hideLoading();
 
-elem.wordInput.addEventListener('input', e => {
-  elem.gallery.innerHTML = '';
-  word = elem.wordInput.value.trim();
-  console.log(word);
-});
-
-
 elem.form.addEventListener("submit", e => {
   e.preventDefault();
+
+  elem.gallery.innerHTML = '';
+  word = elem.wordInput.value.trim();
 
   if (word !== '') {
     fetchingFrom(word)
