@@ -36,7 +36,7 @@ elem.wordInput.addEventListener('input', e => {
 elem.form.addEventListener("submit", e => {
   e.preventDefault();
 
-  if (elem.word !== '') {
+  if (word !== '') {
     fetchingFrom(word)
       .then(data => {
         render(data);
