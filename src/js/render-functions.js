@@ -7,13 +7,13 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import { elem, lightbox, displayToast } from "../main";
 
 export function render(data) {
-  elem.gallery.innerHTML = '';
-  const images = data.hits;
-
-  if (data.length === 0) {
+  if (data.hits.length === 0) {
     displayToast("Sorry, there are no images matching your search query. Please try again!");
   }
   else {
+    elem.gallery.innerHTML = '';
+    const images = data.hits;
+
     const markup = images.map(image => `<li class="gallery-item">
                 <a class="gallery-link" href="${image.largeImageURL}">
                   <img class="gallery-image" src="${image.webformatURL}" alt="${image.tags}" />
@@ -31,4 +31,3 @@ export function render(data) {
     lightbox.refresh();
   }
 }
-
